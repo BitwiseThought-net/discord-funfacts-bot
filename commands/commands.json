@@ -1,5 +1,6 @@
 {
   "funfact": {
+    "parameter_name": "fact",
     "*": [
       {
         "comment": "Global commands available in every channel to everyone",
@@ -16,7 +17,8 @@
       }
     ]
   },
-  "bot-info": {
+  "bot": {
+    "parameter_name": "command",
     "123456789123456789": [
       {
         "comment": "Channel Commands! ...for role (111111111) and that special user who isn't in the role (123456789), but not those two untrusted neer-do-wells (222222222, & 333333333) nor that treacherous group (987654321).",
@@ -38,7 +40,8 @@
       }
     ]
   },
-  "server-info": {
+  "server": {
+    "parameter_name": "info",
     "987654321987654321": [
       {
         "comment": "Channel Commands, everyone in the channel can use ... except 333333333, they're in time out.",
