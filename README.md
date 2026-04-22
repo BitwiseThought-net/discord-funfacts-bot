@@ -1,6 +1,6 @@
 # 🤖 Discord Terminal Bot (Docker Edition)
 
-A secure, Docker-integrated Discord bot that allows authorized users to execute server-side commands via Discord Slash Commands (`/exec`). This bot is designed to run within an isolated container while maintaining the ability to manage the host's Docker engine and execute local scripts.
+A secure, Docker-integrated Discord bot that allows authorized users to execute server-side commands via Discord Slash Commands (`/funfact`). This bot is designed to run within an isolated container while maintaining the ability to manage the host's Docker engine and execute local scripts.
 
 ---
 
@@ -85,17 +85,15 @@ Example (also see [commands/commands.json](https://github.com/BitwiseThought-net
 
 ## 🚀 4. Installation & Deployment
 Follow these steps to deploy the bot on your server:
-- File Preparation: Ensure bot.py, Dockerfile, docker-compose.yml, requirements.txt, and .env are all present in your project root directory.
-- Initialization: Create a subfolder named commands/ and place your commands.json inside it.
-- Building and Starting: Open your terminal in the project root and execute docker compose up --build -d. This command builds the image with the Docker CLI and launches the bot as a background service.
-- Live Monitoring: To see command execution results and internal bot logs in real-time, run docker compose logs -f.
-- Applying Changes: If you modify the Dockerfile or requirements.txt, re-run docker compose up --build -d to refresh the container image.
+- Check out this repository.
+- Execute docker compose up --build -d. This command builds the image with the Docker CLI and launches the bot as a background service.
 
 ## 🔍 5. Usage & Logic
 Once deployed, the bot integrates into your server via Slash Commands:
-- Interacting: Simply type /exec in a configured channel.
+- Interacting: Simply type /funfact in a configured channel.
 - Context-Aware Autocomplete: The command dropdown list dynamically filters aliases based on your specific User ID, Roles, and the Current Channel. Commands you are not authorized to run will be hidden.
 - Real-time Config: You can edit commands.json on your server at any time. Changes take effect instantly without needing to restart the container.
+- Any changes to the bot.py may require a refresh of the Discord client. (In-client: Ctrl + R)
 - Permission Hierarchy:
   1. Owner Bypass: The OWNER_ID defined in your .env file is exempt from all restrictions and can run any command.
   2. Blacklist Priority: If a user or their role is blacklisted in a specific command block, they are denied immediately, even if they are whitelisted elsewhere.
