@@ -7,7 +7,8 @@ RUN sed -i 's/Components: main/Components: main contrib non-free non-free-firmwa
         cowsay \
         fortune-mod \
         fortunes \
-        fortunes-min && \
+        fortunes-min \
+        iputils-ping && \
     curl -fsSL https://get.docker.com | sh && \
     rm -rf /var/lib/apt/lists/*
 

@@ -6,19 +6,18 @@ services:
     env_file:
       - .env
     environment:
-      - PYTHONUNBUFFERED=1  # Ensures logs appear in 'docker logs' immediately
+      - PYTHONUNBUFFERED=1       # Ensures logs appear in 'docker logs' immediately
       - COMMANDS_FILE=commands/commands.json
-      - LOADING_TIMEOUT=1.5  # Time in seconds before showing the loading message
-#      - LOG_FILE=/app/commands/bot_log.txt  # Leave blank or remove to disable file logging
-      - DETECT_DUPLICATES=True  # Set to False to disable console warnings
+      - LOADING_TIMEOUT=5        # Time in seconds before showing the loading message
+      - DETECT_DUPLICATES=True   # Set to False to disable console warnings
     volumes:
-      - ./bot.py:/app/bot.py        # Mount just the script
-      - ./lib:/app/lib              # Mount the lib folder
-      - ./commands:/app/commands    # Mount the config/scripts folder
+      - ./bot.py:/app/bot.py     # Mount just the script
+      - ./lib:/app/lib           # Mount the lib folder
+      - ./commands:/app/commands # Mount the config/scripts folder
       - /var/run/docker.sock:/var/run/docker.sock # The "Magic" Bridge
       - /var/lib/docker/containers:/app/dcon:ro
       - ./data/config.txt:/app/data/config.txt:ro
-    user: root  # Required to have permission to use the socket
+    user: root                   # Required to have permission to use the socket
 
 
 
