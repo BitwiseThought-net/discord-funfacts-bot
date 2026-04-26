@@ -51,6 +51,8 @@ The bot monitors this file in the background. Adding a new top-level key registe
         "comment": "Public games with a specific user blacklist",
         "permissions": { "blacklist_users": [333333333] },
         "commands": {
+          "no": "/app/commands/no-as-a-service.sh",
+          "nooooooooooooooo": "/app/commands/no-as-a-service.sh | cowsay",
           "Roll a D20": { 
             "command": "bash -c 'echo $(( (RANDOM % 20) + 1 ))'",
             "prepend": "🎲 **Result:** "
