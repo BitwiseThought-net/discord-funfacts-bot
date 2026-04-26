@@ -1,24 +1,30 @@
-from datetime import datetime
+import logging
+import sys
 
-def log_action(user, channel_id, slash_cmd, param_val, status, log_file):
-    """Logs to both the Docker console and the optional log_file."""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_entry = f"[{timestamp}] User: {user} ({user.id}) | Channel: {channel_id} | /{slash_cmd}: {param_val} | Status: {status}"
-    
-    print(log_entry, flush=True)
-    
-    if log_file:
-        try:
-            with open(log_file, 'a') as f:
-                f.write(log_entry + "\n")
-        except Exception as e:
-            print(f"Logging Error: {e}", flush=True)
+# Configure the logging format and level
+logging.basicConfig(
+    level=logging.INFO,
+    format='[%(asctime)s] %(levelname)s: %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    handlers=[logging.StreamHandler(sys.stdout)]
+)
 
-def log_text(user, channel_id, text, log_file):
-    """Simplified text logger."""
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_entry = f"[{timestamp}] User: {user} ({user.id}) | Channel: {channel_id} | Text: {text}"
-    print(log_entry, flush=True)
-    if log_file:
-        with open(log_file, 'a') as f:
-            f.write(log_entry + "\n")
+logger = logging.getLogger("terminal_bot")
+
+def log_action(user, channel_id, slash_cmd, param_val, status):
+    """Logs action details using the standard logging library."""
+    message = f"User: {user} ({user.id}) | Channel: {channel_id} | /{slash_cmd}: {param_val} | Status: {status}"
+    logger.info(message)
+
+def log_text(user, channel_id, text):
+    """Logs raw text events using the standard logging library."""
+    message = f"User: {user} ({user.id}) | Channel: {channel_id} | Text: {text}"
+    logger.info(message)
+
+def log_warn(text):
+    """Logs system warnings."""
+    logger.warning(text)
+
+def log_error(text):
+    """Logs system errors."""
+    logger.error(text)

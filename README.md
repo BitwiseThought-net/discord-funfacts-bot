@@ -30,7 +30,6 @@ The bot is configured via Environment Variables in your `docker-compose.yml` and
 *   `DISCORD_TOKEN`: Your unique bot token.
 *   `OWNER_ID`: Your Discord User ID (Bypasses all blacklist/whitelist checks).
 *   `COMMANDS_FILE`: Path to your JSON config (e.g., `commands/commands.json`).
-*   `LOG_FILE`: (Optional) Path to a persistent log file (e.g., `commands/bot_log.txt`).
 *   `LOADING_TIMEOUT`: Seconds to wait (default `1.5`) before showing the loading message.
 *   `DETECT_DUPLICATES`: (Boolean) If `True`, the bot warns you in the console if duplicate keys are found in your JSON.
 
@@ -188,7 +187,7 @@ Commands can include a `validation` block to check output. Logic can be nested w
 
 *   **Docker Isolation**: The bot runs in a container. Interaction with the host or other containers is limited to the mounted `/var/run/docker.sock`.
 *   **Input Safety**: Users can only select aliases defined in your JSON; they cannot type raw terminal commands directly into Discord.
-*   **Audit Trail**: All attempts (User, Channel, Command, and Status) are logged to the console and the optional `LOG_FILE`.
+*   **Audit Trail**: All attempts (User, Channel, Command, and Status) are logged to the console.
 *   **Read-Only Access**: For maximum security, mount sensitive volumes as `:ro` (read-only) in `docker-compose.yml`.
 *   **Script Safety**: Ensure all scripts in the `commands/` folder use **LF** line endings (not CRLF) and have execution permissions (`chmod +x`).
 *   **Audit Trail**: Every command attempt—including user IDs, channel IDs, and success/fail status—is logged to the console and the optional `LOG_FILE`.
