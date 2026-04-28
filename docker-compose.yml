@@ -9,7 +9,6 @@ services:
       - .env
     environment:
       - PYTHONUNBUFFERED=1       # Ensures logs appear in 'docker logs' immediately
-      - COMMANDS_FILE=commands/commands.json
       - LOADING_TIMEOUT=5        # Time in seconds before showing the loading message
       - DETECT_DUPLICATES=True   # Set to False to disable console warnings
     volumes:
@@ -31,3 +30,5 @@ services:
     volumes:
       - ./commands:/app/commands
     restart: always
+    env_file:
+      - .env
