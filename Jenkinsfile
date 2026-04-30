@@ -1,27 +1,30 @@
 pipeline {
     agent any
-
     stages {
         stage('Checkout') {
             steps {
-                // Jenkins automatically clones the repo here
                 checkout scm
             }
         }
-
-        stage('Deploy to Host') {
+        stage('Deploy') {
             steps {
-                script {
-                    // This runs on the host because of your /var/run/docker.sock mapping
-                    // '--build' ensures it picks up new code changes
-                    //sh 'docker compose up -d --build'
-                    //sh 'cd /deploy/discord-terminal-bot && docker compose up -d --build'
-                    sh 'cd /deploy/discord-terminal-bot && commands/build.sh'
+                // This "binds" your secret file to a temporary variable (envFile)
+                withCredentials([file(credentialsId: 'my-app-env', variable: 'envFile')]) {
+                    script {
+                        // 1. Copy the secret file into the current workspace as '.env'
+                        sh "cp ${envFile} .env"
+                        
+                        // 2. Run docker compose (it will automatically pick up the .env file)
+                        //sh "docker compose up -d --build"
+                        sh 'commands/build.sh'
+                        
+                        // 3. Clean up the .env file after deployment (optional but safer)
+                        sh "rm .env"
+                    }
                 }
             }
         }
     }
-
     post {
         success {
             echo 'Deployment successful!'
