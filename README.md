@@ -197,4 +197,3 @@ For a detailed look at how data moves from the commands json, edited by the incl
 
 ## 👩‍💻 For Developers
 Interested in contributing or modifying the bot? See our [Development Guide](./DEVELOPMENT.md).
-
