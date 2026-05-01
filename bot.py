@@ -48,8 +48,10 @@ def create_callback(cmd_name, param_name):
             return await interaction.response.send_message("❌ Missing parameter.", ephemeral=True)
             
         full_data = load_data(COMMANDS_FILE)
+        
+        # CHANGED: Use the new merging logic to include Global '*' blocks
+        all_blocks = get_combined_blocks(full_data, cmd_name, str(interaction.channel_id))
         cmd_group_config = full_data.get(cmd_name, {})
-        all_blocks = get_combined_blocks(cmd_group_config, str(interaction.channel_id))
         
         target_cmd, last_reason = None, "Not found"
         prepend_str, append_str, validation_rules, variable_key = "", "", None, None
@@ -165,8 +167,10 @@ def create_callback(cmd_name, param_name):
 def create_autocomplete(cmd_name):
     async def autocomplete(interaction: discord.Interaction, current: str):
         full_data = load_data(COMMANDS_FILE)
-        cmd_group_config = full_data.get(cmd_name, {})
-        all_blocks = get_combined_blocks(cmd_group_config, str(interaction.channel_id))
+        
+        # CHANGED: Use merging logic so Autocomplete also shows Global '*' commands
+        all_blocks = get_combined_blocks(full_data, cmd_name, str(interaction.channel_id))
+        
         choices, seen = [], set()
         search_curr = current.lower()
         
@@ -196,6 +200,10 @@ async def sync_commands_from_json():
     new_found = False
     
     for cmd_name, config in data.items():
+        # SKIP: The root '*' key is used for merging into others, not as a standalone command
+        if cmd_name == "*":
+            continue
+
         if cmd_name not in existing_cmds:
             # Extract specific parameter name from JSON (defaults to 'about')
             param_name = config.get("parameter_name", "about")
