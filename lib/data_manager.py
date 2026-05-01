@@ -14,7 +14,6 @@ def load_data(file_path):
     def detect_duplicates(pairs):
         """
         Hook to detect duplicate keys during JSON parsing recursively.
-        Only prints warnings if DETECT_DUPLICATES is enabled.
         Uses the logging library to maintain a consistent paper-trail.
         """
         result = {}
@@ -35,14 +34,25 @@ def load_data(file_path):
             log_error(f"ERROR: {file_path} contains invalid JSON syntax: {e}")
             return {}
 
-def get_combined_blocks(data, channel_id_str):
-    """Combines channel-specific blocks with global wildcard blocks."""
-    # Ensure data is a dictionary before calling .get to prevent crashes on malformed groups
-    if not isinstance(data, dict):
+def get_combined_blocks(full_data, cmd_name, channel_id_str):
+    """
+    Merges specific command blocks with global '*' command blocks.
+    Precedence: Specific Command Blocks > Global '*' Blocks.
+    """
+    if not isinstance(full_data, dict):
         return []
 
-    specific = data.get(channel_id_str, [])
-    global_star = data.get("*", [])
-    global_all = data.get("all", [])
+    # 1. Extract Specific Command config
+    specific_cfg = full_data.get(cmd_name, {})
 
-    return specific + global_star + global_all
+    # 2. Extract Global Defaults if they exist
+    global_cfg = full_data.get("*", {})
+
+    def get_blocks(cfg):
+        if not isinstance(cfg, dict): return []
+        # Return lists from Channel ID, '*', and 'all'
+        return cfg.get(channel_id_str, []) + cfg.get("*", []) + cfg.get("all", [])
+
+    # Order is critical: Specific blocks appear FIRST in the list.
+    # The loop in bot.py breaks at the first match, ensuring specific overrides global.
+    return get_blocks(specific_cfg) + get_blocks(global_cfg)
