@@ -1,9 +1,18 @@
 pipeline {
     agent any
-    environment {
-        REPO_NAME = "${env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')}"
-    }
+//    environment {
+//        REPO_URL = "${env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')}"
+//        REPO_NAME = "${env.REPO_URL.tokenize('/').last().split("\\.")[0]}"
+//    }
     stages {
+        stage('Setup Variables') {
+            steps {
+                script {
+                    // Explicitly assign to the env object so withCredentials can see it
+                    env.REPO_NAME = env.GIT_URL.tokenize('/').last().split("\\.")[0]
+                }
+            }
+        }
 /*
         stage('Test') {
             steps {
