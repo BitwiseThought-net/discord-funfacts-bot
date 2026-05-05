@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    environment {
+        REPO_NAME = "${env.GIT_URL.replaceFirst(/^.*\/([^\/]+?).git$/, '$1')}"
+    }
     stages {
 /*
         stage('Test') {
@@ -25,7 +28,7 @@ pipeline {
         stage('Deploy') {
             steps {
                 // This "binds" your secret file to a temporary variable (envFile)
-                withCredentials([file(credentialsId: 'discord-terminal-bot-env', variable: 'envFile')]) {
+                withCredentials([file(credentialsId: '${env.REPO_NAME}-env', variable: 'envFile')]) {
                     script {
                         sh "[ -f '${envFile}' ] && cp '${envFile}' .env"
                         sh "cp ${envFile} .env"
@@ -36,7 +39,6 @@ pipeline {
                                 exit 0
                               fi
                         '''
-
                         
                         // 3. Clean up the .env file after deployment (optional but safer)
                         sh "[ -f .env ] && rm .env"
